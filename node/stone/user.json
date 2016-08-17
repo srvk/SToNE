@@ -1,7 +1,7 @@
 {
-    "baselinecomplete": "yes",
+    "baselinecomplete": "no",
     "training_id": "0",
-    "last_fail": "yes",
-    "experiment_status": 3,
+    "last_fail": "no",
+    "experiment_status": 1,
     "training_status": ""
 }
