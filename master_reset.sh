@@ -1,0 +1,34 @@
+#!/bin/bash
+
+. master_config.sh
+. /node/stone/node_config.sh
+
+echo $1
+if [[ $1 != "" ]]; then
+  exit 0;
+fi
+
+# Reset the data directories
+# The previous data directories are $DATA_DIR/.text_copy
+#for x in $dev $test $train; do
+#  cp $x/.text_copy $x/text
+#  sh ./local/cslu_text_transform.sh $x
+#done;
+
+# Reset the dictionary directories
+# The previous dictionary directories are $x/dict.txt.old
+# Remove $x/lexiconp.txt since it will conflict with $x/lexicon.txt
+#for x in data/local/dict_swbd data/local/dict_cmu; do
+#  cp $x/dict.txt.old $x/dict.txt
+#  if [[ -f $x/lexiconp.txt ]]; then
+#    rm $x/lexiconp.txt
+#  fi
+#done;
+
+# Reset the language model directories
+#rm -r $lang $lang_test
+#rm data/local/lm/srilm/*  # Remove the generated srilm model
+
+# Keep the existing models, but separate
+#rm -r exp1
+#mv exp exp1
