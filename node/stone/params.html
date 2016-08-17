@@ -1,0 +1,595 @@
+  <head>
+    <style>
+      .update-area {
+        background-color:#333;
+        color:#fff;
+        height:400px;
+        border:2px solid;
+        border-radius:10px;
+        padding:10px;
+        overflow-y:scroll;
+      }
+      .scrollbar::-webkit-scrollbar-thumb{
+        background-color:#B03C3F;
+        border-radius:10px;
+      }
+      .scrollbar::-webkit-scrollbar-thumb:hover{
+        background-color:#BF4649;
+        border:1px solid #aaaaaa;
+      }
+      .scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .scrollbar::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0.3); 
+        border-radius: 10px;
+        background-color: #fff;
+      }
+      .table>tbody>tr.warning>td.info {
+        background: #d9edf7 !important;
+      }
+      .table>thead>tr.warning>td.info {
+        background: #d9edf7 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container starter-template" id="trainingcontainer">
+      <div id="baselinealert" class="alert alert-warning" style="display:none;">
+        <h3>Baseline not completed!</h3>
+        You should complete the <a href="/">baseline</a> before applying any optimizations.
+      </div>
+      <h3 id="statustext" style="text-align:left;margin-bottom:30px;">Training Status</h3>
+      <form class="form-horizontal" role="form" id="trainingparameters">
+        <div id="results" style="display:none;">
+          <table class="table" style="margin-bottom:60px;text-align:left;">
+            <tbody id="result10" class="baseline" style="display:none;">
+              <tr> <!-- Row 1 Mono part-1 -->
+                <td rowspan="2" style="vertical-align:middle;">
+                  <div class="col-sm-12">
+                    <h4>Mono Parameters</h4>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content="This is the relative path for the monophone model's training directory. It is recommended to keep the default path.">
+                    <label for="monotrainpath" class="col-sm-6 control-label"><span class="btn glyphicon glyphicon-info-sign" data-toggle="modal" data-target="#datainfo"></span> Train directory</label>
+                    <div class="col-sm-6">
+                      <input name="train_mono" type="text" class="form-control" id="monotrainpath" placeholder="data/xxxxxxx">
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content="This is the relative path for the monophone model's testing directory. It is recommended to keep the default path.">
+                    <label for="monotestpath" class="col-sm-6 control-label">Test directory</label>
+                    <div class="col-sm-6">
+                      <input name="test_mono" type="text" class="form-control" id="monotestpath" placeholder="data/test_9_10">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr><!-- Row 2 Mono part-2 -->
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content="The 'beam size' is used for alignments and should be set corresponding to the length of audio clips in the data-set. 10 is a good value for clips less than 10s.">
+                    <label for="monobeam" class="col-sm-6 control-label">Beam size</label>
+                    <div class="col-sm-6">
+                      <input name="mono_beam" type="number" class="form-control" id="monobeam" placeholder="10">
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content="The 'retry-beam size' is used as a fallback for beam size. It should have a value larger than the beam size; a 2x - 4x multiple of 'beam size' is recommended.">
+                    <label for="monoretrybeam" class="col-sm-6 control-label">Retry-beam size</label>
+                    <div class="col-sm-6">
+                      <input name="mono_retrybeam" type="number" class="form-control" id="monoretrybeam" placeholder="50">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr> <!-- Row 3 Triphone -->
+                <td>
+                  <div class="col-sm-12">
+                    <h4>Triphone Parameters</h4>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content="This is the relative path for the triphone model's training directory. It is recommended to keep the default path.">
+                    <label for="tritrainpath" class="col-sm-6 control-label">Train directory</label>
+                    <div class="col-sm-6">
+                      <input name="train" type="text" class="form-control" id="tritrainpath" placeholder="data/train">
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content="This is the relative path for the triphone model's testing directory. It is recommended to keep the default path.">
+                    <label for="tritestpath" class="col-sm-6 control-label">Test directory</label>
+                    <div class="col-sm-6">
+                      <input name="test" type="text" class="form-control" id="tritestpath" placeholder="data/test">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <!--tr id="result20" style="display:none;">
+                <td id="spellresults">
+                  <div class="form-group">
+                    <label for="lmopt" class="col-sm-12 control-label">Spellchecker auto-corrects certain spelling errors in the transcripts.</label>      
+                </td>
+                <td>
+                    <div class="col-sm-6">
+                      <button type="button" data-loading-text="Applying ..." id="spellchecker" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Apply Spellchecker</button>
+                    </div>
+                    <div class="col-sm-6">
+                      <button type="button" data-toggle="modal" data-target="#myModal" id="spellchecker" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span> Manual Spellcheck</button>
+                    </div>
+                  </div>
+                </td>
+              </tr!-->
+              <tr id="result21" style="display:none;">
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content='This generates pronunciations for all the out of vocabulary words using g2p models trained on your lexicon.'>
+                    <label for="oovwords" class="col-sm-6 control-label">Generate OOV pronunciations</label>
+                    <div class="col-sm-6">
+                      <select name="oovwords" class="form-control" id="oovwords" style="text-align:left;">
+                        <option>Yes</option>
+                        <option>No</option>
+                      </select>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group">
+                    <label for="oovtext" class="col-sm-4 control-label">Addtional text</label>
+                    <div class="col-sm-8">
+                      <textarea name="oovtext" class="form-control" id="oovtext" rows="4" placeholder="Paste an optional text here which can be used to further train the language model."></textarea>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+               <tr id="result30" style="display:none;">
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content='Apply speaker adaptation. This will increase the training period significantly.'>
+                    <label for="speakeropt" class="col-sm-6 control-label">Apply fmllr adaptation</label>
+                    <div class="col-sm-6">
+                      <select name="apply_fmllr" class="form-control" id="speakeropt" style="text-align:left;">
+                        <option>Yes</option>
+                        <option>No</option>
+                      </select>
+                    </div>
+                  </div>
+                </td>
+                <td></td>
+              </tr>
+              <tr id="result31" style="display:none;">
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content='Applies Knersey-Ney smoothing while generating the language model.'>
+                    <label for="lmopt" class="col-sm-6 control-label">Apply kndiscount</label>
+                    <div class="col-sm-6">
+                      <select name="applylmoptimize" class="form-control" id="lmopt" style="text-align:left;">
+                        <option>Yes</option>
+                        <option>No</option>
+                      </select>
+                    </div>
+                  </div>
+                </td>
+                <td></td>
+              </tr>
+              <tr id="result46" style="display:none;">
+                <td>
+                  <div class="form-group">
+                    <label for="cmvnopt" class="col-sm-6 control-label">Apply CMVN</label>
+                    <div class="col-sm-6">
+                      <select name="apply_cmvn" class="form-control" id="cmvnopt" style="text-align:left;">
+                        <option>Yes</option>
+                        <option>No</option>
+                      </select>
+                    </div>
+                  </div>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr id="result53" style="display:none;">
+                <td>
+                  <div class="form-group">
+                    <label for="minwt" class="col-sm-6 control-label">Min score weight</label>
+                    <div class="col-sm-6">
+                      <input name="min_lmwt" type="number" class="form-control" id="minwt" placeholder="12">
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group" data-toggle='popover' data-placement='top' data-content="Maximum value of the language model weight which will be used in ">
+                    <label for="maxwt" class="col-sm-6 control-label">Max score weight</label>
+                    <div class="col-sm-6">
+                      <input name="max_lmwt" type="number" class="form-control" id="maxwt" placeholder="16">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <table id="globaltable" class="table">
+          <tbody>
+            <tr> <!-- Row 4 Global Training -->
+              <td rowspan="2" style="vertical-align:middle;">
+              <h4 style="text-align:left;margin-bottom:30px;">Training parameters</h4>
+              </td>
+              <td>
+                <div class="col-sm-12">
+                  <h4>Global Parameters</h4>
+                </div>
+              </td>
+              <td>
+                <div class="form-group" data-toggle='popover' data-placement='top' data-content='# of states'>
+                  <label for="globalstates" class="col-sm-6 control-label"># States</label>
+                  <div class="col-sm-6">
+                    <input name="states" type="number" class="form-control" id="globalstates" placeholder="5000">
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="form-group" data-toggle='popover' data-placement='top' data-content='# of gaussians'>
+                  <label for="globalgaussians" class="col-sm-6 control-label"># Gaussians</label>
+                  <div class="col-sm-6">
+                    <input name="gaussians" type="number" class="form-control" id="globalgaussians" placeholder="60000">
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="col-sm-12">
+                  <h4>Lexicon Parameters</h4>
+                </div>
+              </td>
+              <td>
+                <div class="form-group" data-toggle='popover' data-placement='top' data-content="The default lexicon is based on 'switchboard' dictionary. It has approximately 30,000 words. 'cmu' lexicon has approximately 130,000 words.">
+                  <label for="dictlexicon" class="col-sm-6 control-label">Select lexicon</label>
+                  <div class="col-sm-6">
+                    <select name="lexicon" class="form-control" id="dictlexicon">
+                      <option>swbd</option>
+                      <option>cmu</option>
+                    </select>
+                  </div>
+                </div>                  
+              </td>
+              <td id="oovratefield">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="beam-warning" class="alert alert-danger" style="display:none;">
+            <strong>The training failed because of a bad <em>beam size</em> value. Please change the beam, and retry beam values based on the recommended values in the table below.</strong>
+            <table class="table table-bordered" style="margin-top:20px;">
+              <thead>
+                <tr class="warning">
+                  <td class="info">
+                    Training audio length
+                  </td>
+                  <td>
+                    Beam size
+                  </td>
+                  <td>
+                    Retry-beam size
+                  </td>
+                  <td>
+                    Expected training completion (swbd)
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="warning">
+                  <td class="info">
+                    10 - 20s
+                  </td>
+                  <td>
+                    10
+                  </td>
+                  <td>
+                    40
+                  </td>
+                  <td>
+                    12 hours
+                  </td>
+                </tr>
+                <tr class="warning">
+                  <td class="info">
+                    20 - 30s
+                  </td>
+                  <td>
+                    40
+                  </td>
+                  <td>
+                    100
+                  </td>
+                  <td>
+                    12 hours
+                  </td>
+                </tr>
+                <tr class="warning">
+                  <td class="info">
+                    30 - 60s
+                  </td>
+                  <td>
+                    60
+                  </td>
+                  <td>
+                    200
+                  </td>
+                  <td>
+                    24 hours
+                  </td>
+                </tr>
+                <tr class="warning">
+                  <td class="info">
+                    60 - 100s
+                  </td>
+                  <td>
+                    100
+                  </td>
+                  <td>
+                    300
+                  </td>
+                  <td>
+                    24 hours
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div> <!-- beam-warning div-->
+        <div id="general-warning" class="alert alert-warning" style="display:none;">
+          The training has been <strong>stopped/failed</strong>. Look into the <strong>LOGS</strong> to see why, and change the parameters.<br>
+          To switch to full firefighting mode, open the terminal and go to 'kaldi-trunk/egs/cslu/s5/' path and run 'bash master_script.sh'.
+        </div>
+        <div class="form-group" style="margin-top:50px;padding-left:5%;">
+          <div class="col-sm-10" style="text-align:left">
+            <button type="submit" class="btn btn-success" id="trainingstart"><span class="glyphicon glyphicon-ok"></span> APPLY AND START TRAINING</button>
+            <button type="button" class="btn btn-danger" id="trainingstop" disabled><span class="glyphicon glyphicon-remove"></span> STOP TRAINING</button>
+          </div>
+        </div>
+      </form>
+      <br>
+        <div class="well" style="margin-left:20%;margin-right:20%">
+          <div class="row" class="alert alert-info">
+            <div class="col-sm-5">
+              <h4 style="text-align:left;">PROGRESS</h4>
+            </div>
+            <div class="col-sm-7">
+              <div class="progress progress-striped" style="margin-top:10px;background-color:#E3E3E3">
+                <div id="statusbar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="alert" id="statusmessage" style="display:none;">
+              <div style="text-align:left;float:left;">
+                <h4>STATUS</h4>
+              </div>
+              <div id="currentmessage">
+                Training started.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.container -->
+    <div class="container" id="trainingstartmenu" style="display:block;">
+      <hr>
+      <br>
+      <div class="wrapper">
+        <div class="row" style="padding-left:5%;">
+         <div class="col-sm-2">
+            <ul class="nav nav-pills nav-stacked">
+              <li class="active popoverclass" style="margin-top:50px;" data-toggle='popover' data-placement='top' data-content="Click this link to see how a log file generated from a successful run would look.">> <u><a href="/successful_log.txt" target="_blank">SAMPLE LOG</a></u></li>
+            </ul>
+          </div>
+          <div class="col-sm-9">
+            <h4>TRAINING LOGS</h4>
+            <div class="tab-content">
+              <div class="tab-pane active update-area scrollbar" id="logs">&nbsp;</div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Instructions for Manual Spellcheck</h4>
+            </div>
+            <div class="modal-body">
+              <ol>
+	        <li>Login to the host machine as per the instructions.</li>
+	        <li>Run the script to access your VM.</li>
+	        <li>Run spellchecker command.</li>
+	      </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var socketmethods = function() {
+        socket.on("STATUS", function(data) {
+          console.log("stdout - "+data.data);
+          //$("#status").append(data.data);
+          newValue = Math.round(data.progress*100/data.total);
+          console.log("data progress - "+data.progress);
+          console.log("data total - "+data.total);
+          $("#statusbar").css("width",newValue+"%");
+          $("#statusbar").text(newValue+"%");
+          var message = data.data.split(",");
+          $("#currentmessage").html("<strong>"+message[0]+" "+message[1]+"</strong> <em>"+
+            message[2].split(" ")[0]+"</em>");
+        });
+        socket.on("EXPERIMENTSTATUS", function(data) {
+          console.log("Experiment status: "+data.id);
+          for (el = 1; el < data.id; el++) {
+            $("#status"+el).attr("class","complete");
+            $($("#status"+el)[0].children[0]).attr("class","badge badge-success")
+            $("#step"+data.id).attr("class", "");
+          }
+          $("#status"+data.id).attr("class","active");
+          $($("#status"+data.id)[0].children[0]).attr("class","badge badge-info")
+          $("#step"+data.id).attr("class", "active");
+          if (data.id === 1)
+            updatepage('?results=10', false);
+        })
+        socket.on("LOGS", function(data) {
+          //console.log("stderr - "+data.data);
+          $("#logs").append(data.data);
+          scroll();
+        });
+        socket.on("OOV", function(oov) {
+          console.log(oov);
+          // TO-DO: Display OOV in the UI
+        });
+        socket.on("TRAININGSTATUS", function(data) {
+          console.log(data);
+          if (data.data == "on") {
+            // Update the page if the training is on.
+            $("#trainingstart").attr("disabled", true);
+            $("#trainingstop").attr("disabled", false);
+            $("#beam-warning").attr("style","display:none;");
+            $("#general-warning").attr("style","display:none;");
+            $("#statusmessage").attr("style","display:block;");
+          } else {
+            $("#trainingstart").attr("disabled", false);
+            $("#trainingstop").attr("disabled", true);
+            $("#statusbar").css("width","0%");
+            $("#statusbar").text("");
+          }
+        });
+        socket.on("SPELL_ERROR", function(data) {
+          console.log("no. of errors: "+data.data);
+          $("#spellresults").append('<div class="col-sm-3 col-sm-offset-6" style="padding-left:0px;padding-right:0px;text-align: center;color: #fff;background: #5cb85c;">'+data.data+' words found with spelling errors.</div>');
+          $("#spellchecker").button('reset');
+          setTimeout(function() {$("#spellchecker").attr("class","btn btn-success disabled")}, 400);
+        });
+        socket.on("close", function(data) {
+          console.log("close code - "+data.data);
+          $("#trainingstart").attr("disabled", false);
+          $("#statusmessage").attr("style","display:none;");
+          if (data.close == 0) {
+            $("#baselinesuccess").attr("style", "font-size:18px;text-align:left;display:block;");
+            $("#trainingstart").attr("style","display:none;");
+          }
+          else if (data.close === 1)
+            $("#beam-warning").attr("style","display:block");
+          else
+            $("#general-warning").attr("style","display:block");
+          // Reset the progressbar
+          $("#statusbar").css("width","0%");
+          $("#statusbar").text("");
+          setTimeout(function() {$("#trainingstop").attr("disabled", true)}, 1000);
+        });
+      }
+      $.get('/baselinecomplete', function(data) {
+        if (data === "no")
+          $("#baselinealert").attr("style","display:block;");
+      });
+      $.get('/params', function(data) {
+        for (name in data)
+          $("[name="+name+"]").val(data[name]);
+      });
+      updatepage = function(paramsURL, toScroll) {
+        var resultindex = paramsURL.indexOf("?");
+        if (resultindex !== -1) {
+          // Reset all views
+          $("#result10").attr("style","display:none;");
+          $("#result20").attr("style","display:none;");
+          $("#result21").attr("style","display:none;");
+          $("#result30").attr("style","display:none;");
+          $("#result31").attr("style","display:none;");
+          $("#result46").attr("style","display:none;");
+          $("#result47").attr("style","display:none;");
+          $("#result53").attr("style","display:none;");
+          var resultid = paramsURL.substr(resultindex+1);
+          console.log(resultid);
+          if (resultid.substr(0,8) === "results=") {
+            $("#results").attr("style","display:block;");
+            var paramsApply = resultid.substr(8,resultid.length).split(",");
+            console.log(paramsApply);
+            for (var param in paramsApply) {
+              // Treat 46, 47 as same param.
+              if (paramsApply[param]==="47") paramsApply[param]="46";
+              $("#result"+paramsApply[param]).attr("style","background:#e3e3e3");
+              if (paramsApply[param]==="21") {
+                $("[name='oovwords']").val("Yes");
+              }
+              if (paramsApply[param]==="30") {
+                $("[name='apply_fmllr']").val("Yes");
+              }
+              if (paramsApply[param]==="31") {
+                $("[name='applylmoptimize']").val("Yes");
+              }
+              if (paramsApply[param]==="46") {
+                $("[name='apply_cmvn']").val("Yes");
+              }
+              if (paramsApply[param]==="53") {
+                $("[name='min_lmwt']").val(5);
+                $("[name='max_lmwt']").val(10);
+              }
+            }
+          }
+        }
+        $("#trainingstatus").attr("style","padding-top:80px;display:block;");
+        if (toScroll !== false) {
+            $('html, body').animate({
+              scrollTop: $("#trainingstatus").offset().top
+            }, 2000);
+        }
+      }
+      $("#trainingstart").click(function() {
+        event.preventDefault();
+        console.log($("#trainingparameters")[0].elements);
+        console.log($("#trainingparameters").serialize());
+        // Show training status message
+        $("#statusmessage").attr("style","display:block;");
+        $("#general-warning").attr("style","display:none;");
+        var active_id;
+        $.each($(".steps").find(".active"), function(key, value) {
+          active_id = value.id.substr(6);
+        });
+        console.log("Active id: "+active_id);
+        $.get("/starttraining", $("#trainingparameters").serialize()+"&experiment_status="+active_id, function(data) {
+          console.log(data);
+          $("#trainingstart").attr("disabled", true);
+          $("#trainingstop").attr("disabled", false);
+          $("#status").html("");
+          $("#logs").html("");
+        });
+      });
+      $("#trainingstop").click(function() {
+        var btn = $(this);
+        $.get("/stoptraining", function(data) {});
+      });
+      $("#spellchecker").click(function() {
+        event.preventDefault();
+        var btn = $(this);
+        $.get("/spellchecker", function(data) {
+          btn.button('loading'); 
+        });
+      })
+      var scroll = function() {
+        $.each($(".update-area"), function(index, value) {
+          value.scrollTop = value.scrollHeight;
+        });
+      }
+      $(".form-group").popover({"trigger":"hover"});
+      $(".problemstatements").popover({"trigger":"hover"});
+      $.get('/data_properties.json', function(data) {
+        htmldata="";
+        for (var elem in data) {
+          htmldata += "<tr><td>"+elem+"</td><td>"+data[elem]+"</td></tr>"
+        }
+        $("#trainingdatainfo").html(htmldata);
+      });
+    </script>

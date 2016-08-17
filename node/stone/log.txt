@@ -1,0 +1,60 @@
+1471362529778,Visited /params.html
+1471362922468,Visited /params.html
+1471362962870,Visited /
+1471362963269,Visited /params.html
+1471366947976,Visited /results.html
+1471367140863,Visited /results.html
+1471367146257,Visited /
+1471367146468,Visited /params.html
+1471374395882,Visited /
+1471374396206,Visited /params.html
+1471442417966,Visited /
+1471442418288,Visited /params.html
+1471442598406,Visited /params.html
+1471442898757,Visited /params.html
+1471443050325,Visited /params.html
+1471443098683,Visited /params.html
+1471443121229,Visited /results.html
+1471443211163,Visited /params.html
+1471443261143,Visited /params.html
+1471443283163,Visited /params.html
+1471444294982,Visited /params.html
+1471445207154,Visited /params.html
+1471445307108,Visited /
+1471445308282,Visited /params.html
+1471445308799,Visited /
+1471445321568,Visited /
+1471445321961,Visited /params.html
+1471445325137,Started training
+1471445325137,Params,dictionary=data/local/dict_phn;train=data/train;test=data/test;dev=data/dev;lang_model=data/local/lang;lang=data/lang_phn;lang_test=data/lang_phn_test;beam=17.0;nj=1;min_lmwt=5;max_lmwt=10;oovwords=Yes;apply_fmllr=Yes;applylmoptimize=Yes;apply_cmvn=Yes;lexicon=swbd;experiment_status=1;
+1471445360308,User is stopping the training
+1471445360386,Training stopped by the user
+1471446382866,Visited /
+1471446383345,Visited /params.html
+1471446383401,Re9VDNUuHkpPjjtn2Nog,Browser session has been opened
+1471446391046,Re9VDNUuHkpPjjtn2Nog,User switched from Baseline to Baseline
+1471446395535,Started training
+1471446395535,Params,dictionary=data/local/dict_phn;train=data/train;test=data/test;dev=data/dev;lang_model=data/local/lang;lang=data/lang_phn;lang_test=data/lang_phn_test;beam=17.0;nj=1;min_lmwt=5;max_lmwt=10;oovwords=Yes;apply_fmllr=Yes;applylmoptimize=Yes;apply_cmvn=Yes;lexicon=swbd;experiment_status=1;
+1471446440946,Training did not finish successfully
+1471446798031,User is stopping the training
+1471452310389,Re9VDNUuHkpPjjtn2Nog,Browser session has been closed
+1471452509708,Visited /
+1471452510072,Visited /params.html
+1471452786564,Started training
+1471452786564,Params,dictionary=data/local/dict_phn;train=data/train;test=data/test;dev=data/dev;lang_model=data/local/lang;lang=data/lang_phn;lang_test=data/lang_phn_test;beam=17.0;nj=1;min_lmwt=5;max_lmwt=10;oovwords=Yes;apply_fmllr=Yes;applylmoptimize=Yes;apply_cmvn=Yes;lexicon=swbd;experiment_status=1;
+1471452833666,Training did not finish successfully
+1471452909527,User is stopping the training
+1471452912014,User is stopping the training
+1471452919195,Visited /
+1471452919598,Visited /params.html
+1471452970720,Visited /
+1471452970968,Visited /params.html
+1471452971113,lpjTXRqtI7n2Bffg2Noh,Browser session has been opened
+1471453058962,Visited /
+1471453059018,lpjTXRqtI7n2Bffg2Noh,Browser session has been closed
+1471453059207,Visited /params.html
+1471453059308,yQwhmkmejUlcr0l92Noi,Browser session has been opened
+1471453072313,yQwhmkmejUlcr0l92Noi,User switched from Generic Adaptation to Baseline
+1471453075378,Started training
+1471453075378,Params,dictionary=data/local/dict_phn;train=data/train;test=data/test;dev=data/dev;lang_model=data/local/lang;lang=data/lang_phn;lang_test=data/lang_phn_test;beam=17.0;nj=1;min_lmwt=5;max_lmwt=10;oovwords=Yes;apply_fmllr=Yes;applylmoptimize=Yes;apply_cmvn=Yes;lexicon=swbd;experiment_status=1;
+1471453122894,Training did not finish successfully

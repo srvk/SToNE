@@ -1,0 +1,336 @@
+<html>
+  <head>
+  <style>
+    .fuelux .wizard ul li {
+      font-size: 14px !important;
+    }
+    .fuelux ul li.inactive {
+      background-color: #f1f6fc !important;
+    }
+    .fuelux ul li.inactive .chevron:before {
+      border-left: 14px solid #f1f6fc !important;
+    }
+    .fuelux .wizard ul li {
+      padding-left: 20px !important;
+      padding-right: 10px !important;
+    }
+    html, body {
+      padding-top: 10px;
+      height:100%;
+    }
+    .btn {
+      margin-right:5px;
+      font-size:16px;
+    }
+    .starter-template {
+      text-align: center;
+    }
+    .popover {
+      max-width: 600px !important;
+    }
+    th {
+      text-align: center;
+    }
+    td {
+      vertical-align: middle !important;
+      text-align: center;
+      padding:10px !important;
+      font-size: 14px !important;
+    }
+    .glyphicon-thumbs-up {
+      font-size: 28px;
+    }
+    .form-group {
+      margin-bottom:0px !important;
+    }
+  </style>
+  <link href="//www.fuelcdn.com/fuelux/2.6.0/css/fuelux.css" rel="stylesheet" type="text/css">
+  <link href="//www.fuelcdn.com/fuelux/2.6.0/css/fuelux-responsive.css" rel="stylesheet" type="text/css">
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container" style="width:100%">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href='#' class='active'><span class="navbar-brand" href="#" style="color:#ffffff;font-size:30px;">SToNE</span></a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav" style="float:inherit;">
+            <li><a id="performlink" href="#trainingstatus">Training</a></li>
+            <li class="nav pull-right"><a href="/results.html"><span class="label label-primary" style="font-size:100%">WER Results</span></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class="container-fluid fuelux" style="margin-top:90px;padding-left:8px;padding-right:8px;">
+      <div id="MyWizard" class="wizard" style="overflow-x:auto">
+        <ul class="steps" style="margin-left: 0">
+        </ul>
+      </div>
+      <form class="form-horizontal" role="form">
+        <div class="step-content">
+        </div>
+      </form>
+    </div>
+    <div class="container-fluid fuelux" id="solutiondisplay" style="display:none;">
+      <h3 style="text-align:left;margin-top:50px;margin-bottom:30px;">Solutions</h3>
+      <table class="table" style="text-align:left">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>How to</th>
+            <th>Toolkit</th>
+            <th>Available</th>
+            <th>Helpful</th>
+          </tr>
+        </thead>
+        <tbody id="solutions" style="text-align:left;">
+        </tbody>
+      </table>
+      <div id="applyall" style="float:right;display:none;margin-bottom:30px;">
+        <a id="applyallbutton" class='btn btn-primary' href='/perform.html'><span class="glyphicon glyphicon-ok"></span> APPLY ALL</a>
+      </div>
+    </div>
+    <div id="trainingstatus" style="padding-top:80px;display:none;">
+    </div>
+    <div class="modal fade" id="datainfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Training Data - Properties</h4>
+          </div>
+          <div class="modal-body" >
+            <table class="table" id="trainingdatainfo">
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="socket.io.js"></script>
+    <script>
+      var socket;
+      var json;
+      var problemsolution = {};
+      var problemGroups = {"Baseline":[]};
+      $(document).ready(function() {
+        $.getJSON("/port.json", function(portconf) {
+          socket = io.connect("http://localhost:"+portconf.sockets);
+          socket.on('error', function() {
+            socket = io.connect(portconf.url+":"+portconf.sockets);
+            socketmethods();
+          });
+        });
+        $.get('/baselinecomplete', function(data) {
+          if (data === "no")
+            $("#baselinealert").attr("style","display:block;")
+        });
+        problem_selection = function() {
+          $.get('/selectedproblems', function(data) {
+            for (el in data) {
+              var problem_name = data[el][1];
+              $.find("input[name='"+problem_name+"']")[0].checked=true;
+            }
+          });
+        }
+
+        $.get('/knowledgebase.json', function(data) {
+          json = data;
+          // Fill in the problem section.
+          var firstProblem = "";
+          for (var item in json.items) {
+            var info = json.items[item].information;
+            var updatedProblem = json.items[item].problem;
+            var step = json.items[item].step;
+            if (step in problemGroups)
+              problemGroups[step].push([updatedProblem, info]);
+            else
+              problemGroups[step] = [[updatedProblem, info]];
+            if (item == 0) firstProblem = updatedProblem;
+            problemsolution[updatedProblem] = json.items[item].solution;
+          }
+          var index = 0;
+          for (var item in problemGroups) {
+            // Add step.
+            var step = "";
+            var stepcontent = "";
+            if (index === 0) {
+              step += "<li id='status"+(index+1)+"' data-target='#step"+(index+1)+"' class='active'><span class='badge badge-info'>"+(index)+"</span>"+item+"<span class='chevron'></span></li>";
+              stepcontent += "<div class='step-pane active' id='step"+(index+1)+"'>";
+            }
+            else {
+              step += "<li id='status"+(index+1)+"' data-target='#step"+(index+1)+"'><span class='badge'>"+(index)+"</span>"+item+"<span class='chevron'></span></li>";
+              stepcontent += "<div class='step-pane' id='step"+(index+1)+"'>";
+              stepcontent += "<h3>Step "+(index+1)+": Select applicable problems</h3>";
+            }
+            // Add step-content
+            // Generic stuff first
+
+            // Cookbook problems now
+            for (var el in problemGroups[item]) {
+              stepcontent += "<div class='form-group'>\
+                        <div class='col-sm-offset-2 col-sm-10'>\
+                      <div class='checkbox'>\
+                        <label class='problemstatements' data-toggle='popover' data-placement='right' data-content='"+problemGroups[item][el][1]+"'>\
+                            <input id='step"+(index+1)+(el)+"' type='checkbox' onclick='' name='"+problemGroups[item][el][0]+"'>" + problemGroups[item][el][0]+ "\
+                        </label>\
+                      </div>\
+                    </div>\
+                      </div>"
+            }
+            stepcontent += "</div>";
+            index++;
+            $(".steps").append(step);
+            $(".step-content").append(stepcontent);
+            // Call problem selection here.
+            problem_selection();
+          }
+        });
+        $("#solutions").on("click", ".btnup", function() {
+          if ($("#"+this.id).attr("style") === "background:#fcf8e3;border-color:#faebcc") {
+            $("#"+this.id).attr("style","background:#ACDB8C;color:#333;");
+            socket.emit("LOGGER",{"log":"User upvoted solution "+this.id});
+          } else {
+            $("#"+this.id).attr("style","background:#fcf8e3;border-color:#faebcc");
+            socket.emit("LOGGER",{"log":"User downvoted solution "+this.id});
+          }
+        });
+
+        solutionMarkup = function(groupKey, groupTargetId) {
+          var solutionMarkup = "";
+          var problemlength = problemGroups[groupKey].length;
+          var totalselections = 0;
+          var applyallHref="/perform.html?results=";
+          var problemsSelected = "";
+          for (index = 0; index < problemlength; index++) {
+            var problemId = groupTargetId.substring(5)+index;
+            if ($(groupTargetId+index)[0].checked === true) {
+              var solutions = problemsolution[$(groupTargetId+index)[0].name];
+              for (var solution in solutions) {
+                solutionMarkup += "<tr>";
+                solutionMarkup += "<td style='text-align:left'>"+solutions[solution].description+"</td>";
+                solutionMarkup += "<td style='text-align:justify'>"+solutions[solution].detail+"</td>";
+                solutionMarkup += "<td style='text-align:center'>"+solutions[solution].toolkit+"</td>";
+                if (solutions[solution].available === "yes") {
+                  solutionMarkup += "<td><a id='performbutton' class='btn btn-primary btnapply' href='/perform.html?results="+problemId+"'>Apply</a></td>";
+                  applyallHref += problemId+",";
+                  totalselections++;
+                }
+                else solutionMarkup += "<td>Not available</td>";
+                problemsSelected += problemId+",";
+                solutionMarkup += "<td style='text-align:center;'>"+" <a class='btn btn-lg btnup' id='btnup"+groupTargetId.substring(5)+"-"+index+"-"+solution+"' style='background:#fcf8e3;border-color:#faebcc';><span class='glyphicon glyphicon-thumbs-up'></span></a></td>";
+                solutionMarkup += "</tr>";
+              }
+            }
+          }
+          if (problemsSelected !== "")
+            socket.emit("LOGGER",{"log":"User changed the problem selection to "+ problemsSelected});
+          if (totalselections <= 1)
+              $("#applyall").attr("style","display:none");
+            else
+              $("#applyall").attr("style","float:right;margin-bottom:30px;");
+          $("#applyallbutton").attr("href", applyallHref);
+          // show solutons div.
+          if (groupKey !== "Baseline") {
+            $("#solutiondisplay").attr("style","display:block");
+            $("#trainingstatus").attr("style","display:none");
+          }
+          else {
+            $("#solutiondisplay").attr("style","display:none");
+            updatepage('?results=10', false);
+          }
+          return solutionMarkup;
+        }
+
+        $("#solutions").on("click", ".btnapply", function() {
+          var action = $("#"+this.id).attr("href");
+          updatepage(action);
+          socket.emit("LOGGER",{"log":"Solution URL "+action});
+          return false;
+        });
+        $("#applyallbutton").on('click', function() {
+          var action = $("#"+this.id).attr("href");
+          updatepage(action);
+          socket.emit("LOGGER",{"log":"Solution URL "+action});
+          return false;
+        });
+      });
+    </script>
+    <script type="text/javascript">
+      var foo;
+      $(function () {
+        $("#trainingstatus").load('/params.html', function(response, status, xhr) {
+          socketmethods();
+        });
+        $(".wizard").on('click', 'li', function() {
+          var fromStep;
+          var toStep;
+          $.each($(".steps").find($(".active")), function(key, value) {
+            $(value).attr("class","complete");
+            fromStep = value.textContent.substr(1);
+            $($(value).attr("data-target")).attr("class","step-pane");
+            $(value.children[0]).attr("class","badge badge-success");
+          });
+          $.each($(".steps").find($(".inactive")), function(key, value) {
+            $(value).attr("class","");
+            fromStep = value.textContent.substr(1);
+            $($(value).attr("data-target")).attr("class","step-pane");
+            $(value.children[0]).attr("class","badge");
+          });
+
+          $("#solutions").html(solutionMarkup(this.textContent.substring(1), 
+              $(this).attr("data-target")));
+          toStep = this.textContent.substr(1);
+          socket.emit("LOGGER",{"log":"User switched from "+fromStep+" to "+toStep});
+          $($(this).attr("data-target")).attr("class","step-pane active");
+          if ($(this).attr("class") === "complete") {
+            $(this).attr("class","active");
+            $(this.children[0]).attr("class","badge badge-info");
+          } else {
+            $(this).attr("class","inactive");
+          }
+          console.log("from ",fromStep," to: ", toStep);
+          toShowSolutions($(this).attr("data-target"));
+          disableInactiveElements($(this), $(this).attr("data-target"));
+        });
+        $(".step-content").on('click', 'input', function() {
+          if ($(this).attr("onclick") !== "return false") {
+            var groupElement = $(this).parent().parent().parent().parent().parent();
+            $("li[data-target='#"+groupElement.attr("id")+"']").each(function() {
+              $("#solutions").html(solutionMarkup($(this)[0].textContent.substring(1), "#"+groupElement.attr("id")));
+            });
+            toShowSolutions("#"+groupElement.attr("id"));
+            disableInactiveElements($(this), "#"+groupElement.attr("id"));
+          }
+        });
+        toShowSolutions = function(currentStep) {
+          anyProblemSelected = false;
+          $.each($(currentStep).find($("input")), function(key, value) {
+            anyProblemSelected = anyProblemSelected || value.checked;
+          });
+          if (anyProblemSelected) $("#solutiondisplay").attr("style", "display:block");
+          else $("#solutiondisplay").attr("style", "display:none");
+        }
+        disableInactiveElements = function(parent, currentStep) {
+          if (parent.attr("class") === "inactive") {
+            $.each($(currentStep).find($("input")), function(key, value) {
+              $(value).attr("onclick","return false")
+            });
+          } else {
+            $.each($(currentStep).find($("input")), function(key, value) {              
+              $(value).attr("onclick","")
+            });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

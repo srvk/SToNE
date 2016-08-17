@@ -1,0 +1,345 @@
+{
+    "items": [
+        {
+            "problem": "Imperfect beam alignments",
+            "information": "Beam size is a parameter associated with alignment of the training audio dataset with their corresponding transcriptions. The better the alignment, the better your recognition performance. With too small values, a lot of your data will not fail in the alignment, and not be eventually used. With too large values, the training will take a long time. A reasonable value depends on the length of an average audio file in your training dataset.",
+            "step": "Data Setup",      
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Adjust the beam and retry-beam values based on audio length",
+                    "detail": "",
+                    "toolkit": "All"
+                }
+            ]
+        },
+        {
+            "problem": "Out of vocabulary words",
+            "information": "Out-of-vocabulary (OOV) words are those that the recognizer has not been setup to recognize. Refer to \"WER Results\" to see the % of such words in your dataset.",
+            "step": "Data Setup",     
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Update the dictionary and language model",
+                    "detail": "1. Update the dictionary to include the out-of-vocabulary words. Use a g2p model to generate the pronunciations for these missing words.<br>2. Update the language model to include unigram probabilities for each of the out-of-vocabulary word.<br>3. Further enhance the language model by providing additional text data containing these out-of-vocabulary words.",
+                    "toolkit": "All"
+                }
+            ]
+        },
+        {
+            "problem":"Sampling Frequencies",
+            "information":"There are two sampling frequencies in speech, 16Khz \\(typical\\) or 8Khz. If you are using telephony speech, it is more likely going to be 8Khz; else it will be 16Khz. Either way, you should ensure that the training and testing dataset have the same sampling frequency.",
+            "step": "Data Setup",
+            "solution": [
+                {
+                    "ranking":"1",
+                    "upvotes":"0",
+                    "available":"",
+                    "description":"Check the data description ",
+                    "detail":"",
+                    "toolkit":""
+                }
+            ]
+        },
+        {
+            "problem": "Speaker Adaptation",
+            "information": "Are you building a speaker-independent or a speaker-dependent model? If you are building the former, it can be useful to adapt general parameters of the model to each individual speaker's voice for better accuracy. Speaker adaptation techniques achieve that.",
+            "step": "Generic Adaptation",     
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "fMLLR",
+                    "detail": "",
+                    "toolkit": "Kaldi"
+                }
+            ]
+        },
+        {
+            "problem": "Improve Language Model",
+            "information": "Language models are used to predict the most probably word sequence. The quality of language model becomes increasingly important if you are building a conversation model. Use language model optimization techniques to improve your language model further.",
+            "step": "Generic Adaptation",     
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Apply Kneser-Ney smoothing",
+                    "detail": "",
+                    "toolkit": "All"
+                }
+            ]
+        },
+        {
+            "problem": "Command-and-control Interface",
+            "information": "If you are building a command-and-control interface or your vocabulary size is small (<2000 words), the language model should only cover bigram history for robustness.",
+            "step": "Generic Adaptation",     
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "no",
+                    "description": "Apply bigram language model",
+                    "detail": "",
+                    "toolkit": ""
+                }
+            ]
+        },
+        {
+            "problem": "Conversational Interface",
+            "information": "If you are building a conversation interface or your vocabulary size is large (>100,000 words), the language model should cover atleast trigram history for better results.",
+            "step": "Generic Adaptation",     
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "no",
+                    "description": "Apply trigram language model",
+                    "detail": "",
+                    "toolkit": ""
+                }
+            ]
+        },
+        {
+            "problem": "Penalizing Mistakes",
+            "information": "Often, a recognizer can be trained to learn from its own mistakes, i.e. it can penalize mistakes, and reward correctness.",
+            "step": "Generic Adaptation",     
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "no",
+                    "description": "Discriminative Training",
+                    "detail": "",
+                    "toolkit": ""
+                }
+            ]
+        },
+    {
+            "problem": "Pronunciation of the users",
+            "information": "A mismatch between the accent that recognizer is trained to recognize, e.g. American speech in CMU lexicon, and what the users are actually speaking, e.g. British, Asian, etc. can significantly impact recognition.",
+            "step": "Context-specific Adaptation",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Adapt the pronunciations in the dictionary",
+                    "detail": "Do you have sample of actual pronunciations of the users?<br>If yes, use a g2p model to generate new pronunciations for existing words in the dictionary.<br>If no, refer to commonly misunderstood phonemes in the error analysis module and replace those in the dictionary.",
+                    "toolkit": "All"
+                }
+            ]
+        },
+        {
+            "problem": "Speaking Rate - SPR range small",
+            "information": "Often, the users have a speaking rate different from what the recognizer is trained to recognize. But all the speakers have a very similar speaking rate, i.e. their range is small. Specific techniques can help fix the recognizer for such a problem.",
+            "step": "Context-specific Adaptation",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Static Frame Rate Adaptation",
+                    "detail": "",
+                    "toolkit": "Sphinx"
+                }
+            ]
+        },
+        {
+            "problem": "Speaking Rate - SPR range large",
+            "information": "Often, the users have a speaking rate different from what the recognizer is trained to recognize. But the speakers have a very different speaking rate, i.e. their range is large. Specific techniques can help fix the recognizer for such a problem.",
+            "step": "Context-specific Adaptation",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "",
+                    "description": "Dynamic Frame Rate Adaptation",
+                    "detail": "",
+                    "toolkit": "Sphinx"
+                }
+            ]
+        },
+    {
+            "problem": "Distorting factor = F0",
+            "information": "Speakers can have variable vocal tract length, leading to pitch variations. This is a known issue in children.",
+            "step": "Context-specific Adaptation",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "",
+                    "description": "VTLN",
+                    "detail": "Vocal Tract Length Normalization",
+                    "toolkit": ""
+                }
+            ]
+        },
+    {
+            "problem": "Distorting factor = F1",
+            "information": "F1 - or the first formant - corresponds to the closeness of the tongue is to the roof of the mouth. Large variations in F1 or a different range than expected (300-1000Hz) can harm recognizer performance.",
+            "step": "Context-specific Adaptation",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "",
+                    "description": "Discriminative Training",
+                    "detail": "Discriminative Training against vowels",
+                    "toolkit": ""
+                }
+            ]
+        },
+    {
+            "problem": "Distorting factor = F2",
+            "information": "F2 - or the second formant - corresponds to the frontness or backness of the highest part of the tongue during the production of the vowel. Large variations in F2 or a different range than expected (850-2500Hz) can harm recognizer performance.",
+            "step": "Context-specific Adaptation",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "",
+                    "description": "Discriminative Training",
+                    "detail": "Discriminative Training against vowels",
+                    "toolkit": ""
+                }
+            ]
+        },
+    {
+            "problem": "Distorting factor = Channel",
+            "information": "The recording environment, e.g. the microphones used, their positioning relative to the mouth, etc. can also impact recognizer performance.",
+            "step": "Context-specific Adaptation",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "CMVN",
+                    "detail": "Cepstral Mean Normalization",
+                    "toolkit": ""
+                }
+            ]
+        },
+    {
+            "problem": "Distorting factor = Noise",
+            "information": "If you have significant background noise in your dataset (SNR < 0), corresponding noise normalization techniques should be used to achieve better performance.",
+            "step": "Context-specific Adaptation",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "CMVN",
+                    "detail": "Cepstral Variance Normalization",
+                    "toolkit": ""
+                }
+            ]
+        },
+
+    {
+            "problem": "Many Substitution Errors",
+            "information": "Specific words are often misunderstood by the recognizer as something else. There might be a systematic pattern of substitution, which should be fixed.",
+            "step": "Tune Parameters",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "",
+                    "description": "Increase unigram probability of the confused word in the Language Model",
+                    "detail": "",
+                    "toolkit": "All"
+                },
+        {
+                    "ranking": "2",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Systematic phoneme replacement",
+                    "detail": "",
+                    "toolkit": "All"
+                },
+        {
+                    "ranking": "2",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Add alternate pronunciations for confused words",
+                    "detail": "",
+                    "toolkit": "All"
+                }   
+            ]
+        },
+    {
+            "problem": "Many Insertion Errors",
+            "information": "Often, the recognizer understands a long words, e.g. \"understanding\" as two smaller words \"under\" \"standing\". Change the insertion penalty to fix this.",
+            "step": "Tune Parameters",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "",
+                    "description": "Increase Word Insertion Penalty",
+                    "detail": "",
+                    "toolkit": "All"
+                },
+        {
+                    "ranking": "2",
+                    "upvotes": "0",
+                    "available": "no",
+                    "description": "Decrease Silence Penalty",
+                    "detail": "",
+                    "toolkit": "All"
+                }
+            ]
+        },
+    {
+            "problem": "Many Deletion Errors",
+            "information": "Often, the recognizer understands two small words, e.g. \"fix\" \"this\" as one long words \"fixate\" Change the deletion penalty to fix this.",
+            "step": "Tune Parameters",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "",
+                    "description": "Decrease Word Insertion Penalty",
+                    "detail": "",
+                    "toolkit": "All"
+                }
+            ]
+        },
+    {
+            "problem": "Change decoding range",
+            "information": "The recognizer has two specific sources of knowledge: acoustic model and language model. It combines them using a specific weight for the language model. Find the best weight for language model weight by specifying a larger range to try from.",
+            "step": "Tune Parameters",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Modify LM weight",
+                    "detail": "",
+                    "toolkit": "All"
+                }
+            ]
+        },
+
+    {
+            "problem": "Has the recognizer overfitted the data?",
+            "information": "The recognizer needs to be trained to recognize \"unseen\" data, but often it only performs well on training dataset, and not on unseen dataset. This is overfitting.",
+            "step": "Overfitting",    
+            "solution": [
+                {
+                    "ranking": "1",
+                    "upvotes": "0",
+                    "available": "yes",
+                    "description": "Adjust the number of gaussians or number of states",
+                    "detail": "1. Calculate the number of frames = length of data in hours / frame length (default = 10ms)<br/>2. Find avg. number of frames for each gaussian = #frames/#gaussians<br/>3. If result of (2) us less than 50, reduce the #gaussians and #states. If it is above 100, increase #gaussians and #states.",
+                    "toolkit": ""
+                }
+            ]
+        }
+    ]
+}

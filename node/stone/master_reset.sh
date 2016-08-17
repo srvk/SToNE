@@ -1,0 +1,1 @@
+/home/vagrant/eesen/asr_egs/tedlium/v2-30ms/master_reset.sh
