@@ -190,8 +190,8 @@ Vagrant.configure("2") do |config|
     chown -R ${user}:${user} node
 
     cd /home/${user}/eesen/asr_egs/tedlium/v2-30ms
-    cp /vagrant/v2-30ms/{master_config.sh,master_reset.sh,master_script.sh,parse_options.sh} .
-    cp /vagrant/v2-30ms/decode_ctc_lat_model.sh steps/
+    cp /vagrant/{master_config.sh,master_reset.sh,master_script.sh,parse_options.sh} .
+    cp /vagrant/decode_ctc_lat_model.sh steps/
 
     # Provisioning runs as root; we want files to belong to '${user}'
     chown -R ${user}:${user} /home/${user}
@@ -199,10 +199,6 @@ Vagrant.configure("2") do |config|
     # start monitoring watched folder
     #su ${user} -c "cd /home/${user}/tools/eesen-offline-transcriber && ./watch.sh >& /vagrant/log/watched.log &"
 
-    # Handy info
-    #echo "\n\n\nWatching folder (/vagrant/)transcribe_me/ for new files to transcribe...
-#.ctm files will appear alongside source files
-#logs are in (/vagrant/)log/"
     if [ ${user} == vagrant ] 
     then
       echo "Point your Chrome or Safari browser to http://192.168.56.101:3000 to visit SToNE"
