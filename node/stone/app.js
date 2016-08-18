@@ -212,14 +212,15 @@ app.get('/starttraining', function(req, res) {
 	}); // on close of cleanscript
 	console.log('Executed master_script successfully.');
 	res.send("Successfullly started the training.");
-})
+}) // close of app.get('/starttraining', function(req, res)
 
 	app.get('/stoptraining', function(req, res) {
 	    logger("User is stopping the training");
 	    // Reset the training status
 	    userdata.training_status = "";
 	    fs.writeFileSync("user.json", JSON.stringify(userdata,null,4));
-	    process.kill(-process.pid); // kill the entire tree
+	    console.log('Trying to kill process.pid: '+ process.pid);
+	    process.kill(-child_process.pid); // kill the entire tree
 	    res.send("Sent SIGKILL");
 	});
 
