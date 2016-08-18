@@ -196,8 +196,19 @@ Vagrant.configure("2") do |config|
     # Provisioning runs as root; we want files to belong to '${user}'
     chown -R ${user}:${user} /home/${user}
 
-    # start monitoring watched folder
-    #su ${user} -c "cd /home/${user}/tools/eesen-offline-transcriber && ./watch.sh >& /vagrant/log/watched.log &"
+  SHELL
+end
+
+# always monitor watched folder
+  Vagrant.configure("2") do |config|
+  config.vm.provision "shell", run: "always", inline: <<-SHELL
+    if grep --quiet vagrant /etc/passwd
+    then
+      user="vagrant"
+    else
+      user="ubuntu"
+    fi
+    rm -rf /var/run/motd.dynamic
 
     if [ ${user} == vagrant ] 
     then
@@ -213,5 +224,7 @@ Vagrant.configure("2") do |config|
       su ${user} -c "nodejs app.js >& nodejs.log &"
     fi
 
-  SHELL
+    # monitor 'watched' folder for transcribe jobs
+    #su ${user} -c "cd /home/${user}/tools/eesen-offline-transcriber && ./watch.sh >& /vagrant/log/watched.log &"
+SHELL
 end
