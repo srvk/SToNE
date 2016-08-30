@@ -1,15 +1,38 @@
 # SToNE
 Run EESEN training in a VM in a browser, on AWS EC2 cloud AMI with GPU
 
+It is assumed you've cloned this GitHub repository into a local working
+folder.  It creates a folder `SToNE`. All commands in this document refer
+to this working directory. For example
+```
+git clone http://github.com/riebling/SToNE
+cd SToNE
+```
+
 ## Requirements
+### AWS
 This assumes familiarity with running Amazon Machine Images on Amazon EC2.
 This requires an account with Amazon Web Services (AWS)
 The instance type requires a GPU, and the training will take several days,
 so be warned, compute charges can be on the order of magnitude of $100.
 
-## Configuration
-On Amazon EC2 Management Console, in group us-east-1 (N. Virginia)
-under Security Groups (https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#SecurityGroups)
+### DATA
+This experiment requires the TEDLIUM data set which can be obtained from
+[OpenSLR](http://www.openslr.org/resources/7/TEDLIUM_release1.tar.gz)
+It's really big (21 GB) so we do not distribute it. We prefer to store
+it on the host computer in the working directory, so to obtain and unpack
+it, from the working folder (`SToNE/`) execute these commands:
+```
+mkdir db
+cd db
+wget http://www.openslr.org/resources/7/TEDLIUM_release1.tar.gz
+tar zxvf TEDLIUM_release1.tar.gz
+```
+This will create the `TEDLIUM_release1/` folder required by the experiment
+
+## AWS Configuration
+On Amazon EC2 Management Console, in group `us-east-1` (N. Virginia)
+under [Security Groups](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#SecurityGroups)
 Edit or create a Security Group with Group Name 'default' on AWS Console; and with the Inbound tab, add:
 
   * An Inbound rule: HTTP
@@ -64,6 +87,8 @@ more output:
 ==> default: stdin: is not a tty
 ==> default: Point your Chrome or Safari browser to http://107.23.153.239:3000 to visit SToNE
 ```
-(the IP address will be different)
-Now try pasting or opening that URL in a Chrome (or Safari) browser
+Lots more output will happen the first time, as the VM is provisioned,
+(applications and data are downloaded, configured, and compiled)
 
+Now try pasting or opening that URL in a Chrome (or Safari) browser
+(the IP address will be different)
