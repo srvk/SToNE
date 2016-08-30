@@ -114,6 +114,24 @@ Vagrant.configure("2") do |config|
     cd /home/${user}/eesen/asr_egs/tedlium/v2-30ms
     git clone http://github.com/srvk/lm_build
 
+    # get cantab-TEDLIUM language model
+    if [ ! -f db/cantab-TEDLIUM/cantab-TEDLIUM-pruned.lm3.gz ]
+      rm -rf db
+      ln -s /vagrant/db .
+      cd db
+      if [ ! -f cantab-TEDLIUM ]
+        wget --no-verbose --output-document=- http://cantabresearch.com/cantab-TEDLIUM.tar.bz2 | bzcat | tar --extract --file=-
+      fi
+    fi
+
+    # DO NOT GET - assume it's there! TEDLIUM_release1
+    cd /home/${user}/eesen/asr_egs/tedlium/v2-30ms/db
+    if [ ! -f TEDLIUM_release1 ]
+      echo "Missing TEDLIUM_release1 data set. Please download it from"
+      echo "http://www.openslr.org/resources/7/TEDLIUM_release1.tar.gz"
+      exit 1
+    fi
+
     # get eesen-offline-transcriber
     mkdir -p /home/${user}/tools
     cd /home/${user}/tools
