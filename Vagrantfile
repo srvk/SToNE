@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.provider "aws" do |aws, override|
 
-      aws.tags["Name"] = "Eesen Transcriber"
+      aws.tags["Name"] = "SToNE Training"
       aws.ami = ENV["AWS_AMI"] 
       aws.instance_type = ENV["AWS_INSTANCE_TYPE"]
       
