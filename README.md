@@ -10,15 +10,28 @@ cd SToNE
 ```
 
 ## Requirements
+### Tools
+You will need
+ * [Vagrant](http://vagrantup.com/)
+ * [VirtualBox](http://virtualbox.org/)
+ * Vagrant AWS and SSHFS plugins
+ 
+ Before provisioning the VM, you need to install the two Vagrant plugins:
+```
+    vagrant plugin install vagrant-aws
+    vagrant plugin install vagrant-sshfs
+```
+[Info about sshfs plugin](https://github.com/dustymabe/vagrant-sshfs) 
+
 ### AWS
 This assumes familiarity with running Amazon Machine Images on Amazon EC2.
-This requires an account with Amazon Web Services (AWS)
+This requires an account with Amazon Web Services (AWS).
 The instance type requires a GPU, and the training will take several days,
 so be warned, compute charges can be on the order of magnitude of $100.
 
-### DATA
+### Data
 This experiment requires the TEDLIUM data set which can be obtained from
-[OpenSLR](http://www.openslr.org/resources/7/TEDLIUM_release1.tar.gz)
+[OpenSLR](http://www.openslr.org/resources/7/TEDLIUM_release1.tar.gz).
 It's really big (21 GB) so we do not distribute it. We prefer to store
 it on the host computer in the working directory, so to obtain and unpack
 it, from the working folder (`SToNE/`) execute these commands:
@@ -28,7 +41,7 @@ cd db
 wget http://www.openslr.org/resources/7/TEDLIUM_release1.tar.gz
 tar zxvf TEDLIUM_release1.tar.gz
 ```
-This will create the `TEDLIUM_release1/` folder required by the experiment
+This will create the `TEDLIUM_release1/` folder required by the system.
 
 ## AWS Configuration
 On Amazon EC2 Management Console, in group `us-east-1` (N. Virginia)
@@ -57,7 +70,7 @@ variables.
 ```
 . aws.sh
 ```
-Now it's time to launch the AMI
+Now it's time to launch the Amazon Machine Image
 ```
 vagrant up
 ```
