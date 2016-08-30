@@ -60,8 +60,6 @@ Vagrant.configure("2") do |config|
     end
 
   config.vm.provision "shell", inline: <<-SHELL
-    apt-get update -y
-    apt-get upgrade -y
 
     if grep --quiet vagrant /etc/passwd
     then
@@ -69,6 +67,9 @@ Vagrant.configure("2") do |config|
     else
       user="ubuntu"
     fi
+
+    apt-get update -y
+    apt-get upgrade -y
 
     apt-get install -y git make automake libtool autoconf patch subversion fuse\
        libatlas-base-dev libatlas-dev liblapack-dev sox openjdk-6-jre libav-tools g++\
@@ -115,18 +116,17 @@ Vagrant.configure("2") do |config|
     git clone http://github.com/srvk/lm_build
 
     # get cantab-TEDLIUM language model
-    if [ ! -f db/cantab-TEDLIUM/cantab-TEDLIUM-pruned.lm3.gz ]
+    if [ ! -f db/cantab-TEDLIUM/cantab-TEDLIUM-pruned.lm3.gz ]; then
       rm -rf db
       ln -s /vagrant/db .
       cd db
-      if [ ! -f cantab-TEDLIUM ]
-        wget --no-verbose --output-document=- http://cantabresearch.com/cantab-TEDLIUM.tar.bz2 | bzcat | tar --extract --file=-
+      if [ ! -f cantab-TEDLIUM ]; then
+        wget --no-verbose --output-document=- http://cantabresearch.com/cantab-TEDLIUM.tar.bz2 | bzcat | tar --extract --no-same-owner --file=-
       fi
     fi
 
     # DO NOT GET - assume it's there! TEDLIUM_release1
-    cd /home/${user}/eesen/asr_egs/tedlium/v2-30ms/db
-    if [ ! -f TEDLIUM_release1 ]
+    if [ ! -d /home/${user}/eesen/asr_egs/tedlium/v2-30ms/db/TEDLIUM_release1 ]; then
       echo "Missing TEDLIUM_release1 data set. Please download it from"
       echo "http://www.openslr.org/resources/7/TEDLIUM_release1.tar.gz"
       exit 1
