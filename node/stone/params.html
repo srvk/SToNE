@@ -40,11 +40,12 @@
         You should complete the <a href="/">baseline</a> before applying any optimizations.
       </div>
       <h3 id="statustext" style="text-align:left;margin-bottom:30px;">Training Status</h3>
+<!--
       <form class="form-horizontal" role="form" id="trainingparameters">
         <div id="results" style="display:none;">
           <table class="table" style="margin-bottom:60px;text-align:left;">
             <tbody id="result10" class="baseline" style="display:none;">
-              <tr> <!-- Row 1 Mono part-1 -->
+              <tr> 
                 <td rowspan="2" style="vertical-align:middle;">
                   <div class="col-sm-12">
                     <h4>Mono Parameters</h4>
@@ -67,7 +68,7 @@
                   </div>
                 </td>
               </tr>
-              <tr><!-- Row 2 Mono part-2 -->
+              <tr>
                 <td>
                   <div class="form-group" data-toggle='popover' data-placement='top' data-content="The 'beam size' is used for alignments and should be set corresponding to the length of audio clips in the data-set. 10 is a good value for clips less than 10s.">
                     <label for="monobeam" class="col-sm-6 control-label">Beam size</label>
@@ -85,7 +86,7 @@
                   </div>
                 </td>
               </tr>
-              <tr> <!-- Row 3 Triphone -->
+              <tr> 
                 <td>
                   <div class="col-sm-12">
                     <h4>Triphone Parameters</h4>
@@ -110,7 +111,8 @@
               </tr>
             </tbody>
             <tbody>
-              <!--tr id="result20" style="display:none;">
+
+              <tr id="result20" style="display:none;">
                 <td id="spellresults">
                   <div class="form-group">
                     <label for="lmopt" class="col-sm-12 control-label">Spellchecker auto-corrects certain spelling errors in the transcripts.</label>      
@@ -124,7 +126,8 @@
                     </div>
                   </div>
                 </td>
-              </tr!-->
+              </tr!>
+
               <tr id="result21" style="display:none;">
                 <td>
                   <div class="form-group" data-toggle='popover' data-placement='top' data-content='This generates pronunciations for all the out of vocabulary words using g2p models trained on your lexicon.'>
@@ -211,7 +214,7 @@
         </div>
         <table id="globaltable" class="table">
           <tbody>
-            <tr> <!-- Row 4 Global Training -->
+            <tr> 
               <td rowspan="2" style="vertical-align:middle;">
               <h4 style="text-align:left;margin-bottom:30px;">Training parameters</h4>
               </td>
@@ -259,6 +262,7 @@
             </tr>
           </tbody>
         </table>
+-->
         <div id="beam-warning" class="alert alert-danger" style="display:none;">
             <strong>The training failed because of a bad <em>beam size</em> value. Please change the beam, and retry beam values based on the recommended values in the table below.</strong>
             <table class="table table-bordered" style="margin-top:20px;">
@@ -349,6 +353,7 @@
           </div>
         </div>
       </form>
+      <br>
       <br>
         <div class="well" style="margin-left:20%;margin-right:20%">
           <div class="row" class="alert alert-info">
