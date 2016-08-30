@@ -108,3 +108,8 @@ Now try pasting or opening that URL in a Chrome (or Safari) browser.
 with a message in yellow "Baseline not completed!".  Beneath this, under the
 text "Training Status" click the green button that reads "APPLY AND START TRAINING"
 and watch the progress indicator and output in the TRAINING LOGS window.
+
+This can take a VERY long time with the full TEDLIUM corpus. It is possible to
+get a feel for things by reducing the data (number of speakers) in TEDLIUM_release1.
+It is even possible to run on an non-GPU Amazon Machine Image and do only
+decoding, using built-in models. These are left as an exercise for the user.
