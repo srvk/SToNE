@@ -40,8 +40,9 @@
         You should complete the <a href="/">baseline</a> before applying any optimizations.
       </div>
       <h3 id="statustext" style="text-align:left;margin-bottom:30px;">Training Status</h3>
-<!--
+
       <form class="form-horizontal" role="form" id="trainingparameters">
+<!--
         <div id="results" style="display:none;">
           <table class="table" style="margin-bottom:60px;text-align:left;">
             <tbody id="result10" class="baseline" style="display:none;">
@@ -262,7 +263,6 @@
             </tr>
           </tbody>
         </table>
--->
         <div id="beam-warning" class="alert alert-danger" style="display:none;">
             <strong>The training failed because of a bad <em>beam size</em> value. Please change the beam, and retry beam values based on the recommended values in the table below.</strong>
             <table class="table table-bordered" style="margin-top:20px;">
@@ -341,7 +341,8 @@
                 </tr>
               </tbody>
             </table>
-          </div> <!-- beam-warning div-->
+          </div>
+-->
         <div id="general-warning" class="alert alert-warning" style="display:none;">
           The training has been <strong>stopped/failed</strong>. Look into the <strong>LOGS</strong> to see why, and change the parameters.<br>
           To switch to full firefighting mode, open the terminal and go to 'kaldi-trunk/egs/cslu/s5/' path and run 'bash master_script.sh'.
@@ -353,6 +354,7 @@
           </div>
         </div>
       </form>
+
       <br>
       <br>
         <div class="well" style="margin-left:20%;margin-right:20%">
