@@ -15,6 +15,7 @@ You will need
  * [Vagrant](http://vagrantup.com/)
  * [VirtualBox](http://virtualbox.org/)
  * Vagrant AWS and SSHFS plugins
+ 
  Before provisioning the VM, you need to install the two Vagrant plugins:
 ```
     vagrant plugin install vagrant-aws
