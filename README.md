@@ -103,5 +103,8 @@ more output:
 Lots more output will happen the first time, as the VM is provisioned,
 (applications and data are downloaded, configured, and compiled)
 
-Now try pasting or opening that URL in a Chrome (or Safari) browser
-(the IP address will be different)
+Now try pasting or opening that URL in a Chrome (or Safari) browser.
+(the IP address will be different) You should see a web page "SToNE Training"
+with a message in yellow "Baseline not completed!".  Beneath this, under the
+text "Training Status" click the green button that reads "APPLY AND START TRAINING"
+and watch the progress indicator and output in the TRAINING LOGS window.
