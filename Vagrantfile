@@ -129,7 +129,7 @@ Vagrant.configure("2") do |config|
     if [ ! -d /home/${user}/eesen/asr_egs/tedlium/v2-30ms/db/TEDLIUM_release1 ]; then
       echo "Missing TEDLIUM_release1 data set. Please download it from"
       echo "http://www.openslr.org/resources/7/TEDLIUM_release1.tar.gz"
-      exit 1
+      #exit 1
     fi
 
     # get eesen-offline-transcriber
