@@ -239,9 +239,11 @@ end
       # put the public IP in port.json as the URL for the webapp      
       sed s/X-X-X-X/${publicIP}/ /node/stone/port.json.in > /node/stone/port.json
       # Start node.js app running
-      cd /node/stone
-      su ${user} -c "nodejs app.js >& nodejs.log &"
     fi
+
+    # start the app
+    cd /node/stone
+    su ${user} -c "nodejs app.js >& nodejs.log &"
 
     # monitor 'watched' folder for transcribe jobs
     #su ${user} -c "cd /home/${user}/tools/eesen-offline-transcriber && ./watch.sh >& /vagrant/log/watched.log &"
