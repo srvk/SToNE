@@ -64,6 +64,29 @@ account. You will need:
   * AWS_KEYPAIR - from the "Key Pairs" menu on the EC2 Management Console
   * AWS_PEM - also from the Key Pairs menu
 
+Here is an example of a fully configured `aws.sh` (anonymized)
+```
+#!/bin/bash
+#
+# define env vars for AWS Vagrantfile
+
+export AWS_AMI="ami-d90d92ce" # Ubuntu ("Trusty") Server 14.04 LTS AMI - US-East region, HVM:EBS virtualization
+export AWS_INSTANCE_TYPE="t2.small"
+export AWS_REGION="us-east-1"
+# Make sure you set up security group via AWS console to enable:
+#   HTTP
+#   SSH - preferably for your host IP only
+#   Custom TCP Rule: port 3000 (for node.js app)
+#   Custom TCP Rule: port 6002 (for node.js app)
+
+export AWS_SECURITY_GROUP="default"
+export AWS_KEY="AKIBJ34JZAYNDOSHQWCD"
+export AWS_SECRETKEY="VLCson6WipA1Dbz+/sVBrcgAOJBW9MsOh47a4j2B"
+export AWS_KEYPAIR="my-keypair"
+export AWS_PEM="/home/er1k/keypairs/my-keypair.pem"
+
+export VAGRANT_DEFAULT_PROVIDER=aws
+```
 ## Instructions
 Once you'e customized the aws.sh script. you can run it, which will set severeal environment
 variables.
