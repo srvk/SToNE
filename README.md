@@ -26,8 +26,13 @@ You will need
 ### AWS
 This assumes familiarity with running Amazon Machine Images on Amazon EC2.
 This requires an account with Amazon Web Services (AWS).
-The instance type requires a GPU, and the training will take several days,
+The instance type requires a GPU, 16GB of RAM, and the training will take several days,
 so be warned, compute charges can be on the order of magnitude of $100.
+
+### Running without AWS
+If you have a CUDA-capable NVidia GPU and sufficient RAM, you can run on
+local hardware using Vagrant. After the "Data" step, skip the "AWS Configuration"
+section, skip `aws.sh` and go directly to where it says to `vagrant up`
 
 ### Data
 This experiment requires the TEDLIUM data set which can be obtained from
@@ -136,3 +141,8 @@ This can take a VERY long time with the full TEDLIUM corpus. It is possible to
 get a feel for things by reducing the data (number of speakers) in TEDLIUM_release1.
 It is even possible to run on an non-GPU Amazon Machine Image and do only
 decoding, using built-in models. These are left as an exercise for the user.
+
+### Eesen Transcriber functionality
+Eesen Transcriber (see [http://github.com/srvk/eesen-transcriber](http://github.com/srvk/eesen-transcriber) is built into
+this VM, so that you can take models created by the training and plug them into a system
+that transcribes audio or video into text, captions, etc.
