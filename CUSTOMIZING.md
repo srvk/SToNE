@@ -8,37 +8,36 @@ Dependencies: Node, express, socket.io
     Clone the repository
 
 Note: If you are using one of the kaldiVM images, the setup is already present in the /node/stone path as a git repository.
-Files
-Configuration files
+###Files
+####Configuration files
 
-    results.json - Entire history of successful experiment results stored in an array of objects format (WER, derivatives, user parameters).
-    user.json - Track the user's state for persistence.
-    knowledgebase.json - Cookbook for different optimizations.
-    port.json - Port numbers on which the server runs. "url" parameter is the public IP of the host OS.
-    data_properties.json - Dataset information (CSLU corpus specific)
-    node_config.sh - File where we keep track of the user parameter values. (This file is used by the Kaldi recipe's master_script.sh to apply the optimizations.)
+  * `results.json` - Entire history of successful experiment results stored in an array of objects format (WER, derivatives, user parameters).
+  * `user.json` - Track the user's state for persistence.
+  * `knowledgebase.json` - Cookbook for different optimizations.
+  * `port.json` - Port numbers on which the server runs. "url" parameter is the public IP of the host OS.
+  * `data_properties.json` - Dataset information (CSLU corpus specific)
+  * `node_config.sh` - File where we keep track of the user parameter values. (This file is used by the Kaldi recipe's `master_script.sh` to apply the optimizations.)
 
-Code files
-Client
+###Code files
+####Client
 
-    index.html - This file creates the Wizard like interface, and has the necessary javascript which loads data from the cookbook, uses socket to log user actions.
-    params.html - This file contains the information about the user parameters and is called from index.html.
-    results.html - Loads the results.json file and displays the training results to the user nicely. Also allows selecting parameters from a specific training run (defaults to the last run).
+ * `index.html` - This file creates the Wizard like interface, and has the necessary javascript which loads data from the cookbook, uses socket to log user actions.
+ * `params.html` - This file contains the information about the user parameters and is called from index.html.
+ * `results.html` - Loads the `results.json` file and displays the training results to the user nicely. Also allows selecting parameters from a specific training run (defaults to the last run).
 
-Server
+####Server
 
-    app.js - This is the main server file (written in express). It interfaces with the kaldi-recipe by creating a child process. The information about the path where kaldi-recipe exists is assumed by this file. It uses socket.io to communicate with the client.
+ * app.js - This is the main server file (written in express). It interfaces with the kaldi-recipe by creating a child process. The information about the path where kaldi-recipe exists is assumed by this file. It uses socket.io to communicate with the client.
 
-Kaldi recipe
+###Kaldi recipe
 
-    Usually, there is a run.sh file to execute the kaldi-recipe. For the CSLU corpus, we have changed the run.sh into three different files -
+ * Usually, there is a `run.sh` file to execute the kaldi-recipe. For the CSLU corpus, we have changed the run.sh into three different files -
 
-    master_config.sh - This contains the default user parameters and used as a fallback to node_config.sh (in case, some of the parameter values were not specified - for instance in baseline scenario).
+ 1 `master_config.sh` - This contains the default user parameters and used as a fallback to `node_config.sh` (in case, some of the parameter values were not specified - for instance in baseline scenario).
 
-    master_reset.sh - This script is executed before starting a new training, it cleans the recipe data files to avoid overwriting.
+ 2 `master_reset.sh` - This script is executed before starting a new training, it cleans the recipe data files to avoid overwriting.
 
-    master_script.sh - This adds a few things to the run.sh file such as breaking the script into clean functions (this helps with persistency in case the script could not successfully finish or a situation like server crash). Additionally, it separates the kaldi script output to stderr stream and writes clean output to stdout stream in the format "<stage>,<step>,<started>" which is interpreted by the app.js file to infer the progress of the training.
-
+ 3 `master_script.sh` - This adds a few things to the run.sh file such as breaking the script into clean functions (this helps with persistency in case the script could not successfully finish or a situation like server crash). Additionally, it separates the kaldi script output to stderr stream and writes clean output to stdout stream in the format "<stage>,<step>,<started>" which is interpreted by the app.js file to infer the progress of the training.
 
 ##CHANGES to make to port stone interface to a new recipe:
 
